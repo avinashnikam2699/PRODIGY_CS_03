@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Complexity Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        input[type="password"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #strength {
+            font-weight: bold;
+        }
+        #feedback {
+            margin-top: 10px;
+            color: red;
+        }
+    </style>
+    <script>
+        async function checkPassword() {
+            const password = document.getElementById('password').value;
+            const response = await fetch('/check_password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({password})
+            });
+            const data = await response.json();
+            document.getElementById('strength').innerText = data.strength;
+            document.getElementById('feedback').innerText = data.feedback.join('\n');
+        }
+    </script>
+</head>
+<body>
+    <h1>Password Complexity Checker</h1>
+    <input type="password" id="password" oninput="checkPassword()" placeholder="Enter password">
+    <p>Strength: <span id="strength"></span></p>
+    <p>Feedback:</p>
+    <p id="feedback"></p>
+</body>
+</html>
